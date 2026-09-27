@@ -363,6 +363,7 @@
   }
   .pcard:nth-child(1){top:5rem;z-index:1}
   .pcard:nth-child(2){top:6.4rem;z-index:2;margin-top:2rem}
+  .pcard:nth-child(3){top:7.8rem;z-index:3;margin-top:2rem}
   html.js .pcard{opacity:0}
   .pcard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
   .pcard h3{font-size:var(--step-2);letter-spacing:-0.03em;max-width:16ch}
@@ -1069,21 +1070,21 @@
         });
     });
 
-    // The card underneath recedes only once the next one is actually over it.
-    if (cards.length > 1) {
-      gsap.fromTo(cards[0],
+    // Each card underneath recedes only once the next one is actually over it.
+    cards.slice(0, -1).forEach(function (card, i) {
+      gsap.fromTo(card,
         { scale: 1 },
         {
           scale: 0.972, ease: 'none', transformOrigin: '50% 0%',
           immediateRender: false,
           scrollTrigger: {
-            trigger: cards[1],
+            trigger: cards[i + 1],
             start: 'top 55%',
-            end: 'top top+=110',
+            end: 'top top+=' + (110 + i * 22),
             scrub: true
           }
         });
-    }
+    });
 
     /* ---------- skills schema ---------- */
     gsap.fromTo('.srow',
