@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23102033'/%3E%3Cpath d='M12 47 27 15h10l15 32H41l-3-8H25l-3 8H12Zm16-17h7l-3.5-9L28 30Z' fill='%2314B8A6'/%3E%3C/svg%3E"><meta name="theme-color" content="#102033"><meta charset="utf-8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23102033'/%3E%3Cpath d='M12 47 27 15h10l15 32H41l-3-8H25l-3 8H12Zm16-17h7l-3.5-9L28 30Z' fill='%2314B8A6'/%3E%3C/svg%3E"><meta name="theme-color" content="#0B1726"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ameen Aghazadeh | Data Analyst</title>
 <meta name="description" content="Data analyst with an M.S. in Information Systems (Data Science) and hands-on SQL experience structuring and validating large record sets. Greater Philadelphia / South Jersey.">
@@ -171,57 +171,79 @@
   }
   .hero > *{position:relative;z-index:1}
 
-  /* real bike routes animated on a canvas (see the hero script) */
+  /* The hero is a full-bleed navy stage. The real station network (see the hero script)
+     glows on the right and fades out behind the name. */
+  .hero{color:#F1F5F9;--hero-bg:#0B1726}
   .hero::before{
     content:"";position:absolute;z-index:0;pointer-events:none;
     top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);
-    background-image:radial-gradient(rgba(var(--ink-rgb),0.12) 1px,transparent 1.3px);
-    background-size:24px 24px;
-    -webkit-mask-image:radial-gradient(ellipse 75% 70% at 70% 50%,#000 20%,transparent 75%);
-            mask-image:radial-gradient(ellipse 75% 70% at 70% 50%,#000 20%,transparent 75%);
+    background:
+      radial-gradient(55% 65% at 74% 48%,rgba(var(--accent-rgb),0.13),transparent 70%),
+      radial-gradient(90% 80% at 10% 100%,rgba(29,78,216,0.12),transparent 60%),
+      var(--hero-bg);
+  }
+  .hero::after{
+    /* hairline where the stage ends */
+    content:"";position:absolute;z-index:0;pointer-events:none;
+    bottom:0;height:1px;left:calc(50% - 50vw);right:calc(50% - 50vw);
+    background:linear-gradient(90deg,transparent,rgba(var(--accent-rgb),0.45) 50%,transparent);
   }
   .hero-flow{
     position:absolute;z-index:0;display:block;
-    right:var(--edge);bottom:3rem;width:min(20rem,62vw);aspect-ratio:0.9;
-    opacity:0;transition:opacity 1.2s ease 0.4s;pointer-events:none;
+    left:calc(50% - 50vw);right:calc(50% - 50vw);bottom:0;height:52%;
+    opacity:0;transition:opacity 1.4s ease 0.3s;pointer-events:none;
+    -webkit-mask-image:linear-gradient(to bottom,transparent,#000 35%);
+            mask-image:linear-gradient(to bottom,transparent,#000 35%);
   }
-  .hero-flow.is-ready{opacity:0.55}
+  .hero-flow.is-ready{opacity:0.9}
   .hero-flow canvas{display:block;width:100%;height:100%}
-  @media (min-width:1150px){
+  @media (min-width:900px){
     .hero-flow{
-      top:50%;bottom:auto;transform:translateY(-50%);
-      width:auto;height:min(78svh,40rem);max-width:44%;pointer-events:auto;
-      border-radius:4px;
+      top:0;bottom:0;height:auto;left:auto;right:calc(50% - 50vw);
+      width:min(64vw,72rem);pointer-events:auto;
+      -webkit-mask-image:linear-gradient(to right,transparent 0,#000 38%);
+              mask-image:linear-gradient(to right,transparent 0,#000 38%);
     }
     .hero-flow.is-ready{opacity:1}
-    .hero-flow:hover canvas{filter:saturate(1.3)}
   }
+  .hero-flow:focus-visible{outline-offset:-6px}
 
   .hero-name{
-    font-size:var(--step-5);font-weight:700;
-    letter-spacing:-0.038em;line-height:1.04;max-width:11ch;
+    font-size:var(--step-5);font-weight:700;color:#F8FAFC;
+    letter-spacing:-0.045em;line-height:0.98;max-width:11ch;
   }
   .hero-name .ch{display:inline-block;will-change:transform,opacity}
   html.js .hero-name .ch{opacity:0;transform:translateY(30%)}
   html.js .hero-lede,html.js .hero-meta,html.js .cue{opacity:0}
 
   .hero-lede{
-    font-size:var(--step-2);font-weight:500;
-    letter-spacing:-0.022em;line-height:1.2;max-width:22ch;
-    margin-top:clamp(2.2rem,4.4vw,3.4rem);
+    position:relative;
+    font-size:var(--step-1);font-weight:400;color:rgba(226,232,240,0.82);
+    letter-spacing:-0.012em;line-height:1.4;max-width:26ch;
+    margin-top:clamp(2rem,4vw,3rem);padding-left:1.1rem;
+  }
+  .hero-lede::before{
+    content:"";position:absolute;left:0;top:0.2em;bottom:0.2em;width:2px;
+    background:var(--accent);border-radius:1px;
   }
   .hero-meta{
-    margin-top:1.35rem;font-size:var(--step--1);color:var(--steel);
+    margin-top:1.6rem;font-size:var(--step--1);color:#8494AD;
     display:flex;flex-wrap:wrap;gap:0.35rem 2rem;
   }
   .hero-meta span{display:block}
 
-  .cue{margin-top:auto;padding-top:3rem;display:flex;align-items:flex-start}
+  .cue{position:absolute;left:var(--edge);bottom:2.4rem;display:flex;align-items:flex-start}
   .cue-track{
     position:relative;display:block;width:1px;height:3.6rem;
-    background:rgba(var(--ink-rgb),0.16);overflow:hidden;
+    background:rgba(226,232,240,0.18);overflow:hidden;
   }
   .cue-dot{position:absolute;left:0;top:0;width:1px;height:1.2rem;background:var(--accent)}
+  .hero :focus-visible{outline-color:var(--accent)}
+
+  @media (max-width:899px){
+    .hero{justify-content:flex-start;padding-top:clamp(7rem,18svh,10rem)}
+    .cue{display:none}
+  }
 
   /* ---------- statement ---------- */
   .statement{padding-block:clamp(5rem,14vh,9rem)}
@@ -835,32 +857,62 @@
 </footer>
 
 <script>
-/* Hero: real Citi Bike routes (Jersey City + Hoboken, 2025) drawn on a canvas, with riders
-   travelling along them, weighted by how often each route was ridden. */
+/* Hero: the real Citi Bike network (Jersey City + Hoboken, 2025). Stations sit at their true
+   positions, the busiest routes are drawn as arcs, and riders travel along them weighted by
+   how often each route was ridden. The static network is cached; each frame draws riders only. */
 (function () {
   var link = document.querySelector('.hero-flow');
   var canvas = link && link.querySelector('canvas');
   if (!canvas || !canvas.getContext) return;
   var ctx = canvas.getContext('2d');
+  var base = document.createElement('canvas'), bctx = base.getContext('2d');
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var INK = '16,32,51', TEAL = '20,184,166';
-  var data, pts = [], routes = [], cum = [], total = 0;
+  var TEAL = '45,212,191', MINT = '204,251,241', DOT = '226,232,240';
+  var data, pts = [], routes = [], cum = [], total = 0, maxN = 1;
   var riders = [], pulses = [], W = 0, H = 0, dpr = 1, running = false, visible = true, last = 0;
 
-  function project() {
+  function layout() {
     var r = canvas.getBoundingClientRect();
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     W = r.width; H = r.height;
-    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    [canvas, base].forEach(function (c) { c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); });
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var pad = 10, s = Math.min((W - 2 * pad) / data.w, (H - 2 * pad) / data.h);
-    var ox = (W - data.w * s) / 2, oy = (H - data.h * s) / 2;
+    bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // Wide screens: keep the map in the right part of the canvas (the left fades out behind the name).
+    var wide = W > 600, pad = Math.max(24, Math.min(W, H) * 0.08);
+    var x0 = wide ? W * 0.34 : pad, x1 = W - pad * (wide ? 1.4 : 1), y0 = pad, y1 = H - pad;
+    var s = Math.min((x1 - x0) / data.w, (y1 - y0) / data.h);
+    var ox = x0 + (x1 - x0 - data.w * s) / 2, oy = y0 + (y1 - y0 - data.h * s) / 2;
     pts = data.stations.map(function (p) { return { x: ox + p[0] * s, y: oy + p[1] * s, a: p[2], glow: 0 }; });
     routes = data.routes.map(function (r) {
       var a = pts[r[0]], b = pts[r[1]], dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1;
-      var bend = Math.min(len * 0.18, 26);  // curve every route slightly so paths don't overlap
+      var bend = Math.min(len * 0.2, 34);
       return { a: a, b: b, n: r[2], len: len,
                cx: (a.x + b.x) / 2 - dy / len * bend, cy: (a.y + b.y) / 2 + dx / len * bend };
+    });
+    maxN = routes.length ? routes[0].n : 1;
+    drawBase();
+  }
+
+  function drawBase() {
+    bctx.clearRect(0, 0, W, H);
+    bctx.lineCap = 'round';
+    routes.forEach(function (r) {
+      var w = Math.sqrt(r.n / maxN);
+      bctx.strokeStyle = 'rgba(' + TEAL + ',' + (0.035 + 0.22 * w).toFixed(3) + ')';
+      bctx.lineWidth = 0.6 + 1.2 * w;
+      bctx.beginPath(); bctx.moveTo(r.a.x, r.a.y); bctx.quadraticCurveTo(r.cx, r.cy, r.b.x, r.b.y); bctx.stroke();
+    });
+    pts.forEach(function (p) {
+      if (p.a > 0.45) {  // soft halo on the hubs
+        var g = bctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 10 + 18 * p.a);
+        g.addColorStop(0, 'rgba(' + TEAL + ',' + (0.22 * p.a).toFixed(3) + ')');
+        g.addColorStop(1, 'rgba(' + TEAL + ',0)');
+        bctx.fillStyle = g;
+        bctx.beginPath(); bctx.arc(p.x, p.y, 10 + 18 * p.a, 0, 6.2832); bctx.fill();
+      }
+      bctx.fillStyle = 'rgba(' + DOT + ',' + (0.4 + 0.5 * p.a).toFixed(3) + ')';
+      bctx.beginPath(); bctx.arc(p.x, p.y, 1.1 + 2.4 * p.a, 0, 6.2832); bctx.fill();
     });
   }
 
@@ -878,31 +930,16 @@
 
   function spawn(t0) {
     var r = pick();
-    riders.push({ r: r, t: t0 || 0, v: 1 / (900 + r.len * 22) });
-  }
-
-  function drawBase() {
-    ctx.clearRect(0, 0, W, H);
-    var maxN = routes.length ? routes[0].n : 1;
-    ctx.lineWidth = 1;
-    routes.forEach(function (r) {
-      ctx.strokeStyle = 'rgba(' + INK + ',' + (0.035 + 0.1 * r.n / maxN).toFixed(3) + ')';
-      ctx.beginPath(); ctx.moveTo(r.a.x, r.a.y); ctx.quadraticCurveTo(r.cx, r.cy, r.b.x, r.b.y); ctx.stroke();
-    });
-    pts.forEach(function (p) {
-      ctx.fillStyle = 'rgba(' + INK + ',' + (0.35 + 0.4 * p.a).toFixed(3) + ')';
-      ctx.beginPath(); ctx.arc(p.x, p.y, 1.4 + 3.2 * p.a, 0, 6.2832); ctx.fill();
-      if (p.glow > 0) {
-        ctx.fillStyle = 'rgba(' + TEAL + ',' + (0.8 * p.glow).toFixed(3) + ')';
-        ctx.beginPath(); ctx.arc(p.x, p.y, 1.6 + 3.2 * p.a, 0, 6.2832); ctx.fill();
-      }
-    });
+    riders.push({ r: r, t: t0 || 0, v: 1 / (1400 + r.len * 26) });
   }
 
   function frame(now) {
     if (!running) return;
     var dt = Math.min(now - (last || now), 50); last = now;
-    drawBase();
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(base, 0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineCap = 'round';
     for (var i = riders.length - 1; i >= 0; i--) {
       var k = riders[i]; k.t += k.v * dt;
       if (k.t >= 1) {
@@ -910,25 +947,27 @@
         pulses.push({ x: k.r.b.x, y: k.r.b.y, life: 1 });
         riders.splice(i, 1); spawn(); continue;
       }
-      var tail = Math.max(0, k.t - 0.22), steps = 8, prev = at(k.r, tail);
+      var tail = Math.max(0, k.t - 0.3), steps = 10, prev = at(k.r, tail);
       for (var j = 1; j <= steps; j++) {
         var p = at(k.r, tail + (k.t - tail) * j / steps);
-        ctx.strokeStyle = 'rgba(' + TEAL + ',' + (0.75 * j / steps).toFixed(3) + ')';
-        ctx.lineWidth = 1.6;
+        ctx.strokeStyle = 'rgba(' + TEAL + ',' + (0.55 * j / steps).toFixed(3) + ')';
+        ctx.lineWidth = 1.8;
         ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(p.x, p.y); ctx.stroke();
         prev = p;
       }
-      ctx.fillStyle = 'rgb(' + TEAL + ')';
-      ctx.beginPath(); ctx.arc(prev.x, prev.y, 2.1, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = 'rgba(' + TEAL + ',0.25)';
+      ctx.beginPath(); ctx.arc(prev.x, prev.y, 5, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = 'rgb(' + MINT + ')';
+      ctx.beginPath(); ctx.arc(prev.x, prev.y, 1.7, 0, 6.2832); ctx.fill();
     }
     for (var q = pulses.length - 1; q >= 0; q--) {
-      var pu = pulses[q]; pu.life -= dt / 900;
+      var pu = pulses[q]; pu.life -= dt / 1100;
       if (pu.life <= 0) { pulses.splice(q, 1); continue; }
-      ctx.strokeStyle = 'rgba(' + TEAL + ',' + (0.5 * pu.life).toFixed(3) + ')';
+      ctx.strokeStyle = 'rgba(' + TEAL + ',' + (0.45 * pu.life).toFixed(3) + ')';
       ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.arc(pu.x, pu.y, 3 + (1 - pu.life) * 14, 0, 6.2832); ctx.stroke();
+      ctx.beginPath(); ctx.arc(pu.x, pu.y, 3 + (1 - pu.life) * 16, 0, 6.2832); ctx.stroke();
     }
-    pts.forEach(function (p) { if (p.glow > 0) p.glow = Math.max(0, p.glow - dt / 700); });
+    ctx.globalCompositeOperation = 'source-over';
     requestAnimationFrame(frame);
   }
 
@@ -938,21 +977,28 @@
     else if (!go) running = false;
   }
 
+  function paintStill() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(base, 0, 0, W, H);
+  }
+
   function start(json) {
     data = json;
-    project();
+    layout();
     // Weight riders by ride counts, softened so quieter routes still get some traffic.
     total = 0; cum = routes.map(function (r) { total += Math.pow(r.n, 0.6); return total; });
-    var n = W < 360 ? 45 : 80;
+    var n = W < 600 ? 32 : 56;
     for (var i = 0; i < n; i++) spawn(Math.random());
-    drawBase();
+    paintStill();
     link.classList.add('is-ready');
     if ('ResizeObserver' in window) {
+      var first = true;
       new ResizeObserver(function () {
-        var old = routes; project();
+        if (first) { first = false; return; }
+        var old = routes; layout();
         riders.forEach(function (k) { k.r = routes[old.indexOf(k.r)] || routes[0]; });
         pulses = [];
-        if (!running) drawBase();
+        if (!running) paintStill();
       }).observe(canvas);
     }
     if ('IntersectionObserver' in window) {
