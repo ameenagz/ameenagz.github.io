@@ -245,13 +245,16 @@
     .cue{display:none}
   }
 
-  /* ---------- statement ---------- */
-  .statement{padding-block:clamp(5rem,14vh,9rem)}
-  .statement p{
-    font-size:var(--step-3);font-weight:500;
-    letter-spacing:-0.026em;line-height:1.28;max-width:20ch;
+  /* ---------- statement + key figures ---------- */
+  .statement{padding-block:clamp(4.5rem,12vh,7.5rem)}
+  .statement-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(2.5rem,6vw,3.5rem)}
+  @media (min-width:960px){
+    .statement-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(3rem,6vw,6rem);align-items:center}
   }
-  @media (min-width:700px){ .statement p{max-width:25ch} }
+  .statement p{
+    font-size:var(--step-2);font-weight:500;
+    letter-spacing:-0.022em;line-height:1.32;max-width:24ch;
+  }
   .statement .w{transition:color 160ms linear}
   html.js .statement .w{color:rgba(var(--ink-rgb),0.2)}
   html.js .statement .w.on{color:var(--ink)}
@@ -360,15 +363,17 @@
     padding:0.45rem 0.7rem;border-radius:2px;overflow-wrap:anywhere;
   }
 
-  /* ---------- counters ---------- */
-  .stats{padding-block:clamp(4rem,11vh,7rem)}
-  .stats ul{
-    display:grid;grid-template-columns:repeat(2,1fr);
-    gap:clamp(2rem,5vw,3rem) clamp(1.25rem,4vw,3rem);
+  /* ---------- counters (inside the statement band) ---------- */
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    background:#FFFFFF;border:1px solid var(--rule);border-radius:4px;
+    box-shadow:0 1px 2px rgba(var(--ink-rgb),0.04),0 12px 32px -18px rgba(var(--ink-rgb),0.18);
   }
-  @media (min-width:900px){ .stats ul{grid-template-columns:repeat(4,1fr)} }
+  .stat{padding:clamp(1.2rem,3vw,1.9rem) clamp(1rem,2.6vw,1.7rem)}
+  .stat:nth-child(odd){border-right:1px solid var(--rule)}
+  .stat:nth-child(-n+2){border-bottom:1px solid var(--rule)}
   .stat-rule{
-    display:block;height:2px;background:var(--accent);
+    display:block;width:1.75rem;height:2px;background:var(--accent);
     transform-origin:left center;margin-bottom:1rem;
   }
   html.js .stat-rule{transform:scaleX(0)}
@@ -376,8 +381,8 @@
     display:block;
     font-family:var(--mono);
     font-variant-numeric:tabular-nums;
-    font-size:var(--step-3);font-weight:500;
-    letter-spacing:-0.04em;line-height:1;
+    font-size:clamp(1.7rem,1.1rem + 1.9vw,2.5rem);font-weight:500;
+    letter-spacing:-0.04em;line-height:1;white-space:nowrap;
   }
   .stat-label{
     display:block;margin-top:0.75rem;font-size:var(--step--1);
@@ -580,7 +585,31 @@
   <!-- STATEMENT -->
   <section class="statement wrap" aria-labelledby="statement-h">
     <h2 class="sr-only" id="statement-h">Profile</h2>
-    <p data-split="word">Data analyst in Greater Philadelphia / South Jersey working in SQL, Python and Power BI, with an M.S. in Information Systems (Data Science).</p>
+    <div class="statement-grid">
+      <p data-split="word">Data analyst in Greater Philadelphia / South Jersey working in SQL, Python and Power BI, with an M.S. in Information Systems (Data Science).</p>
+      <ul id="stats" class="stat-grid" aria-label="Selected figures">
+        <li class="stat">
+          <span class="stat-rule" aria-hidden="true"></span>
+          <span class="stat-num" data-count="500000" data-dec="0" data-suffix="+">500,000+</span>
+          <span class="stat-label">clinical trial records structured in PostgreSQL</span>
+        </li>
+        <li class="stat">
+          <span class="stat-rule" aria-hidden="true"></span>
+          <span class="stat-num" data-count="28800" data-dec="0" data-suffix="">28,800</span>
+          <span class="stat-label">records in the survival analysis cohort</span>
+        </li>
+        <li class="stat">
+          <span class="stat-rule" aria-hidden="true"></span>
+          <span class="stat-num" data-count="25" data-dec="0" data-suffix="%">25%</span>
+          <span class="stat-label">vacancy reduction for a property management client</span>
+        </li>
+        <li class="stat">
+          <span class="stat-rule" aria-hidden="true"></span>
+          <span class="stat-num" data-count="3.91" data-dec="2" data-suffix="">3.91</span>
+          <span class="stat-label">graduate GPA</span>
+        </li>
+      </ul>
+    </div>
   </section>
 
   <!-- EXPERIENCE -->
@@ -657,33 +686,6 @@
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- COUNTERS -->
-  <section class="stats wrap" aria-labelledby="stats-h">
-    <h2 class="sr-only" id="stats-h">Selected figures</h2>
-    <ul id="stats">
-      <li class="stat">
-        <span class="stat-rule" aria-hidden="true"></span>
-        <span class="stat-num" data-count="500000" data-dec="0" data-suffix="+">500,000+</span>
-        <span class="stat-label">clinical trial records structured in PostgreSQL</span>
-      </li>
-      <li class="stat">
-        <span class="stat-rule" aria-hidden="true"></span>
-        <span class="stat-num" data-count="28800" data-dec="0" data-suffix="">28,800</span>
-        <span class="stat-label">records in the survival analysis cohort</span>
-      </li>
-      <li class="stat">
-        <span class="stat-rule" aria-hidden="true"></span>
-        <span class="stat-num" data-count="25" data-dec="0" data-suffix="%">25%</span>
-        <span class="stat-label">vacancy reduction for a property management client</span>
-      </li>
-      <li class="stat">
-        <span class="stat-rule" aria-hidden="true"></span>
-        <span class="stat-num" data-count="3.91" data-dec="2" data-suffix="">3.91</span>
-        <span class="stat-label">graduate GPA</span>
-      </li>
-    </ul>
   </section>
 
   <!-- PROJECTS -->
