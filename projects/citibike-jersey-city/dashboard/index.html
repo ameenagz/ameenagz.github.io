@@ -67,7 +67,7 @@
     <h1>Citi Bike in Jersey City &amp; Hoboken, 2025</h1>
     <p class="lede">One year of bike-share trips: who rides, when, and which stations need bikes moved every morning so the system keeps working.</p>
     <div class="meta">
-      <span>Data: Citi Bike system data (Lyft), Jan–Dec 2025</span>
+      <span>Data: Citi Bike system data (Lyft), Jan to Dec 2025</span>
       <span>Stack: Python · DuckDB SQL · pandas · Chart.js</span>
       <a href="https://github.com/ameenagz/ameenagz.github.io/tree/main/projects/citibike-jersey-city" target="_blank" rel="noopener">Code &amp; methodology</a>
     </div>
@@ -84,7 +84,7 @@
 
   <section>
     <h2>Where bikes pile up each weekday morning</h2>
-    <p class="note">Net bikes gained per weekday, 7:00–9:59am (arrivals minus departures). Teal stations fill up and run out of open docks. Orange stations empty out and run out of bikes. Circle size shows how big the imbalance is.</p>
+    <p class="note">Net bikes gained per weekday, 7:00 to 9:59am (arrivals minus departures). Teal stations fill up and run out of open docks. Orange stations empty out and run out of bikes. Circle size shows how big the imbalance is.</p>
     <div id="map" role="img" aria-label="Map of station imbalance during the weekday morning peak"></div>
     <div class="legend">
       <span><i class="dot" style="background:var(--gain)"></i>Gains bikes (fills up)</span>
@@ -164,7 +164,7 @@ function render(d) {
 
   const top = imb[0];
   document.getElementById('findings').innerHTML = [
-    `<b>It's a commuter system.</b> ${pct(k.member_share)} of rides are by members, the median ride is only ${k.median_duration_min} minutes, and weekday demand spikes at 8am and 5–6pm.`,
+    `<b>It's a commuter system.</b> ${pct(k.member_share)} of rides are by members, the median ride is only ${k.median_duration_min} minutes, and weekday demand spikes at 8am and 5-6pm.`,
     `<b>${top.station_name} gains about ${Math.round(top.net_per_morning)} bikes every weekday morning.</b> Riders bike to the PATH train, and the station fills up. Hoboken Terminal and Exchange Pl show the same pattern, while neighborhood stations like Hamilton Park and Brunswick St empty out.`,
     `<b>Demand is very seasonal.</b> ${mName(peak.month)} (${fmt(peak.rides)} rides) was ${(peak.rides / low.rides).toFixed(1)}× busier than ${mName(low.month)}. Most of that growth comes from casual riders, whose rides rose about 5× from winter to summer.`,
     `<b>Casual riders behave differently.</b> Their rides are longer (${segs.casual.median_duration_min} vs ${segs.member.median_duration_min} min), more often on weekends (${pct(segs.casual.weekend_share)} vs ${pct(segs.member.weekend_share)}), and ${Math.round(segs.casual.round_trip_share / segs.member.round_trip_share)}× more likely to be round trips. That's leisure, not commuting.`,
@@ -231,7 +231,7 @@ function render(d) {
     html += `<span class="lbl">${DAYS[dow - 1]}</span>`;
     for (let h = 0; h < 24; h++) {
       const v = lookup[`${dow}-${h}`] || 0;
-      html += `<div style="background:rgba(28,93,130,${(0.05 + 0.95 * v / max).toFixed(3)})" title="${DAYS[dow - 1]} ${h}:00 — ${v} rides/hour"></div>`;
+      html += `<div style="background:rgba(28,93,130,${(0.05 + 0.95 * v / max).toFixed(3)})" title="${DAYS[dow - 1]} ${h}:00: ${v} rides/hour"></div>`;
     }
   }
   heat.innerHTML = html;
