@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Citi Bike Jersey City 2025 | Ameen Aghazadeh</title>
+<meta name="description" content="Interactive dashboard: one year of Citi Bike trips in Jersey City and Hoboken, with commuting patterns and station rebalancing needs.">
+<meta name="theme-color" content="#EDEAE3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400..700&family=Spline+Sans+Mono:wght@400..500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root{
+    --paper:#EDEAE3; --card:#F6F4EF; --ink:#14191F; --steel:#5C6873; --rule:#CFCBC1;
+    --amber:#D9A425; --blue:#1C5D82; --gain:#0F766E; --loss:#C2410C;
+    --sans:'Familjen Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --mono:'Spline Sans Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.5}
+  .wrap{max-width:74rem;margin:0 auto;padding:0 16px}
+  header{padding:2.5rem 0 1.5rem;border-bottom:1px solid var(--rule)}
+  .back{font-family:var(--mono);font-size:.82rem;color:var(--steel);text-decoration:none}
+  .back:hover{color:var(--blue)}
+  h1{font-size:clamp(1.8rem,1.4rem + 2vw,2.8rem);line-height:1.1;margin:.6rem 0 .5rem;letter-spacing:-.01em}
+  .lede{max-width:44rem;color:var(--steel);margin:0}
+  .meta{font-family:var(--mono);font-size:.78rem;color:var(--steel);margin-top:1rem;display:flex;flex-wrap:wrap;gap:.4rem 1.2rem}
+  .meta a{color:var(--blue)}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.8rem 0}
+  .kpi{background:var(--card);padding:1rem}
+  .kpi b{display:block;font-size:1.6rem;font-weight:600;letter-spacing:-.01em}
+  .kpi span{font-family:var(--mono);font-size:.74rem;color:var(--steel)}
+  section{margin:2.4rem 0}
+  h2{font-size:1.3rem;margin:0 0 .25rem}
+  .note{color:var(--steel);margin:0 0 1rem;max-width:46rem;font-size:.95rem}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+  .panel{background:var(--card);border:1px solid var(--rule);padding:1rem;min-width:0}
+  .chart{position:relative;height:300px}
+  #map{height:440px;border:1px solid var(--rule)}
+  .legend{display:flex;gap:1.2rem;font-family:var(--mono);font-size:.76rem;color:var(--steel);margin-top:.6rem;flex-wrap:wrap}
+  .dot{display:inline-block;width:.7rem;height:.7rem;border-radius:50%;margin-right:.35rem;vertical-align:-1px}
+  .heat{display:grid;grid-template-columns:2.4rem repeat(24,minmax(0,1fr));gap:2px;font-family:var(--mono);font-size:.68rem;color:var(--steel)}
+  .heat div{aspect-ratio:1;border-radius:2px}
+  .heat .lbl{aspect-ratio:auto;display:flex;align-items:center}
+  .heat .hr{aspect-ratio:auto;text-align:center}
+  .findings{counter-reset:f;list-style:none;padding:0;margin:0;display:grid;gap:.8rem}
+  .findings li{counter-increment:f;background:var(--card);border:1px solid var(--rule);padding:.9rem 1rem .9rem 3rem;position:relative}
+  .findings li::before{content:counter(f,decimal-leading-zero);position:absolute;left:1rem;top:.9rem;font-family:var(--mono);color:var(--amber);font-weight:500}
+  footer{border-top:1px solid var(--rule);padding:1.5rem 0 3rem;font-family:var(--mono);font-size:.76rem;color:var(--steel)}
+  footer a{color:var(--blue)}
+  .err{background:#fee2e2;border:1px solid #fca5a5;padding:1rem;display:none}
+  @media (max-width:760px){
+    .grid{grid-template-columns:1fr}
+    .heat{grid-template-columns:2rem repeat(24,minmax(0,1fr));gap:1px;font-size:.6rem}
+    .heat .hr:nth-child(odd){visibility:hidden}
+    #map{height:360px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="../../../">&larr; ameenagz.github.io</a>
+    <h1>Citi Bike in Jersey City &amp; Hoboken, 2025</h1>
+    <p class="lede">One year of bike-share trips: who rides, when, and which stations need bikes moved every morning so the system keeps working.</p>
+    <div class="meta">
+      <span>Data: Citi Bike system data (Lyft), Jan–Dec 2025</span>
+      <span>Stack: Python · DuckDB SQL · pandas · Chart.js</span>
+      <a href="https://github.com/ameenagz/ameenagz.github.io/tree/main/projects/citibike-jersey-city" target="_blank" rel="noopener">Code &amp; methodology</a>
+    </div>
+  </header>
+
+  <p class="err" id="err">Could not load data.json. If you opened this file directly, serve the folder instead: <code>python -m http.server</code>.</p>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section>
+    <h2>Key findings</h2>
+    <ol class="findings" id="findings"></ol>
+  </section>
+
+  <section>
+    <h2>Where bikes pile up each weekday morning</h2>
+    <p class="note">Net bikes gained per weekday, 7:00–9:59am (arrivals minus departures). Teal stations fill up and run out of open docks. Orange stations empty out and run out of bikes. Circle size shows how big the imbalance is.</p>
+    <div id="map" role="img" aria-label="Map of station imbalance during the weekday morning peak"></div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--gain)"></i>Gains bikes (fills up)</span>
+      <span><i class="dot" style="background:var(--loss)"></i>Loses bikes (empties out)</span>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="panel">
+      <h2>Rides per month</h2>
+      <p class="note">Casual riders drive the summer surge.</p>
+      <div class="chart"><canvas id="monthly"></canvas></div>
+    </div>
+    <div class="panel">
+      <h2>Biggest morning imbalances</h2>
+      <p class="note">Top 8 stations that fill up and top 8 that empty out.</p>
+      <div class="chart"><canvas id="imbalance"></canvas></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>When people ride</h2>
+    <p class="note">Average rides per hour. Weekdays show a clear commute pattern; weekends spread across the middle of the day.</p>
+    <div class="heat" id="heat"></div>
+  </section>
+
+  <section class="grid">
+    <div class="panel">
+      <h2>Members vs. casual riders</h2>
+      <div class="chart"><canvas id="segments"></canvas></div>
+    </div>
+    <div class="panel">
+      <h2>Busiest stations</h2>
+      <p class="note">Departures + arrivals, full year. Blue = Jersey City, amber = Hoboken.</p>
+      <div class="chart"><canvas id="stations"></canvas></div>
+    </div>
+  </section>
+
+  <footer>
+    Built by <a href="../../../">Ameen Aghazadeh</a>. Trip data © Lyft Bikes and Scooters, LLC, used under the Citi Bike data license agreement.
+  </footer>
+</div>
+
+<script>
+const C = {ink:'#14191F', steel:'#5C6873', rule:'#CFCBC1', blue:'#1C5D82', amber:'#D9A425', gain:'#0F766E', loss:'#C2410C'};
+const fmt = n => n.toLocaleString('en-US');
+const pct = n => Math.round(n * 100) + '%';
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+Chart.defaults.font.family = "'Familjen Grotesk', system-ui, sans-serif";
+Chart.defaults.color = C.steel;
+Chart.defaults.borderColor = C.rule;
+Chart.defaults.maintainAspectRatio = false;
+
+fetch('data.json').then(r => r.json()).then(render).catch(() => {
+  document.getElementById('err').style.display = 'block';
+});
+
+function render(d) {
+  const k = d.kpis[0];
+  const segs = Object.fromEntries(d.rider_segments.map(s => [s.rider_type, s]));
+  const imb = d.am_peak_imbalance;
+  const months = d.monthly;
+  const peak = months.reduce((a, b) => b.rides > a.rides ? b : a);
+  const low = months.reduce((a, b) => b.rides < a.rides ? b : a);
+  const mName = m => new Date(m + '-01T12:00').toLocaleString('en-US', {month: 'long'});
+  const cross = d.city_flows.filter(f => f.from_city !== f.to_city).reduce((s, f) => s + f.share, 0);
+
+  document.getElementById('kpis').innerHTML = [
+    [fmt(k.total_rides), 'rides in 2025'],
+    [fmt(k.avg_rides_per_day), 'rides per day'],
+    [k.stations, 'stations'],
+    [pct(k.member_share), 'rides by members'],
+    [pct(k.ebike_share), 'on e-bikes'],
+    [k.median_duration_min + ' min', 'median ride'],
+  ].map(([v, l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('');
+
+  const top = imb[0];
+  document.getElementById('findings').innerHTML = [
+    `<b>It's a commuter system.</b> ${pct(k.member_share)} of rides are by members, the median ride is only ${k.median_duration_min} minutes, and weekday demand spikes at 8am and 5–6pm.`,
+    `<b>${top.station_name} gains about ${Math.round(top.net_per_morning)} bikes every weekday morning.</b> Riders bike to the PATH train, and the station fills up. Hoboken Terminal and Exchange Pl show the same pattern, while neighborhood stations like Hamilton Park and Brunswick St empty out.`,
+    `<b>Demand is very seasonal.</b> ${mName(peak.month)} (${fmt(peak.rides)} rides) was ${(peak.rides / low.rides).toFixed(1)}× busier than ${mName(low.month)}. Most of that growth comes from casual riders, whose rides rose about 5× from winter to summer.`,
+    `<b>Casual riders behave differently.</b> Their rides are longer (${segs.casual.median_duration_min} vs ${segs.member.median_duration_min} min), more often on weekends (${pct(segs.casual.weekend_share)} vs ${pct(segs.member.weekend_share)}), and ${Math.round(segs.casual.round_trip_share / segs.member.round_trip_share)}× more likely to be round trips. That's leisure, not commuting.`,
+    `<b>Hoboken and Jersey City work as two separate systems.</b> Only ${pct(cross)} of rides cross between the cities, so rebalancing can be planned per city.`,
+  ].map(t => `<li>${t}</li>`).join('');
+
+  // Map
+  const map = L.map('map', {scrollWheelZoom: false});
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO', maxZoom: 18,
+  }).addTo(map);
+  const pts = imb.filter(s => s.lat && s.lng);
+  pts.forEach(s => {
+    const v = s.net_per_morning;
+    L.circleMarker([s.lat, s.lng], {
+      radius: 3 + Math.sqrt(Math.abs(v)) * 2.6,
+      color: v >= 0 ? C.gain : C.loss, fillColor: v >= 0 ? C.gain : C.loss,
+      fillOpacity: .55, weight: 1,
+    }).bindTooltip(`<b>${s.station_name}</b><br>${v > 0 ? '+' : ''}${v} bikes / morning<br>${fmt(s.arrivals)} arrivals · ${fmt(s.departures)} departures (year)`).addTo(map);
+  });
+  map.fitBounds(L.latLngBounds(pts.map(s => [s.lat, s.lng])), {padding: [20, 20]});
+
+  // Monthly stacked bar
+  new Chart(document.getElementById('monthly'), {
+    type: 'bar',
+    data: {
+      labels: months.map(m => mName(m.month).slice(0, 3)),
+      datasets: [
+        {label: 'Member', data: months.map(m => m.member_rides), backgroundColor: C.blue},
+        {label: 'Casual', data: months.map(m => m.casual_rides), backgroundColor: C.amber},
+      ],
+    },
+    options: {
+      scales: {x: {stacked: true, grid: {display: false}}, y: {stacked: true, ticks: {callback: v => v / 1000 + 'k'}}},
+      plugins: {tooltip: {callbacks: {label: c => `${c.dataset.label}: ${fmt(c.raw)}`}}},
+    },
+  });
+
+  // Imbalance diverging bar
+  const ext = [...imb.slice(0, 8), ...imb.slice(-8)];
+  new Chart(document.getElementById('imbalance'), {
+    type: 'bar',
+    data: {
+      labels: ext.map(s => s.station_name.length > 26 ? s.station_name.slice(0, 25) + '…' : s.station_name),
+      datasets: [{data: ext.map(s => s.net_per_morning), backgroundColor: ext.map(s => s.net_per_morning > 0 ? C.gain : C.loss)}],
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: {legend: {display: false}, tooltip: {callbacks: {
+        title: items => ext[items[0].dataIndex].station_name,
+        label: c => `${c.raw > 0 ? '+' : ''}${c.raw} bikes per weekday morning`,
+      }}},
+      scales: {y: {grid: {display: false}, ticks: {font: {size: 10}}}, x: {title: {display: true, text: 'net bikes / morning'}}},
+    },
+  });
+
+  // Heatmap
+  const heat = document.getElementById('heat');
+  const vals = d.hour_by_weekday;
+  const max = Math.max(...vals.map(v => v.avg_rides));
+  const lookup = Object.fromEntries(vals.map(v => [`${v.dow}-${v.hour}`, v.avg_rides]));
+  let html = '<span></span>' + Array.from({length: 24}, (_, h) => `<span class="hr">${h}</span>`).join('');
+  for (let dow = 1; dow <= 7; dow++) {
+    html += `<span class="lbl">${DAYS[dow - 1]}</span>`;
+    for (let h = 0; h < 24; h++) {
+      const v = lookup[`${dow}-${h}`] || 0;
+      html += `<div style="background:rgba(28,93,130,${(0.05 + 0.95 * v / max).toFixed(3)})" title="${DAYS[dow - 1]} ${h}:00 — ${v} rides/hour"></div>`;
+    }
+  }
+  heat.innerHTML = html;
+
+  // Segments grouped bar
+  const segMetrics = [['weekend_share', 'Weekend rides'], ['ebike_share', 'E-bike rides'], ['round_trip_share', 'Round trips']];
+  new Chart(document.getElementById('segments'), {
+    type: 'bar',
+    data: {
+      labels: segMetrics.map(m => m[1]),
+      datasets: ['member', 'casual'].map(t => ({
+        label: t === 'member' ? `Member (${segs[t].median_duration_min} min median)` : `Casual (${segs[t].median_duration_min} min median)`,
+        data: segMetrics.map(m => segs[t][m[0]] * 100),
+        backgroundColor: t === 'member' ? C.blue : C.amber,
+      })),
+    },
+    options: {
+      scales: {x: {grid: {display: false}}, y: {ticks: {callback: v => v + '%'}}},
+      plugins: {tooltip: {callbacks: {label: c => `${c.dataset.label.split(' (')[0]}: ${c.raw.toFixed(1)}%`}}},
+    },
+  });
+
+  // Top stations
+  const ts = d.top_stations.slice(0, 10);
+  new Chart(document.getElementById('stations'), {
+    type: 'bar',
+    data: {
+      labels: ts.map(s => s.station_name.length > 26 ? s.station_name.slice(0, 25) + '…' : s.station_name),
+      datasets: [{data: ts.map(s => s.total_activity), backgroundColor: ts.map(s => s.city === 'Hoboken' ? C.amber : C.blue)}],
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: {legend: {display: false}, tooltip: {callbacks: {
+        title: items => `${ts[items[0].dataIndex].station_name} (${ts[items[0].dataIndex].city})`,
+        label: c => `${fmt(c.raw)} departures + arrivals`,
+      }}},
+      scales: {y: {grid: {display: false}, ticks: {font: {size: 10}}}, x: {ticks: {callback: v => v / 1000 + 'k'}}},
+    },
+  });
+}
+</script>
+</body>
+</html>
