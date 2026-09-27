@@ -16,9 +16,9 @@ An end-to-end analysis of **1,002,331 bike-share trips** taken in Jersey City an
 
 | # | Finding | Evidence |
 |---|---------|----------|
-| 1 | **It's a commuter system.** 78% of rides are by members, the median ride is 6 minutes (~1 km), and weekday demand peaks at 8am and 5–6pm. | `outputs/kpis.csv`, `charts/hour_by_weekday.png` |
+| 1 | **It's a commuter system.** 78% of rides are by members, the median ride is 6 minutes (~1 km), and weekday demand peaks at 8am and 5-6pm. | `outputs/kpis.csv`, `charts/hour_by_weekday.png` |
 | 2 | **Grove St PATH gains ~53 bikes every weekday morning.** Between 7 and 10am it gets 15,780 arrivals vs. 2,005 departures over the year: riders bike to the train. Hoboken Terminal (~34 across its two stations) and Exchange Pl (~13) behave the same way. | `outputs/am_peak_imbalance.csv` |
-| 3 | **Neighborhood stations drain at the same time.** Hamilton Park, Brunswick St and the Marin/Liberty light-rail stops each lose roughly 8–10 bikes per morning. 21 stations lose 5+ bikes per morning. | same |
+| 3 | **Neighborhood stations drain at the same time.** Hamilton Park, Brunswick St and the Marin/Liberty light-rail stops each lose roughly 8-10 bikes per morning. 21 stations lose 5+ bikes per morning. | same |
 | 4 | **The flow reverses in the evening.** Grove St PATH loses ~45 bikes per weekday between 4 and 7pm. The system partly balances itself, so the problem is timing: docks at the PATH are full by ~9am. | query in *Methodology* |
 | 5 | **Demand is very seasonal.** September (116k rides) was 2.6× busier than February (45k). Casual rides grew 4.9× and member rides 2.2×, so casual riders drive the summer peak. | `outputs/monthly.csv` |
 | 6 | **Casual riders ride for leisure.** Their rides are longer (8.1 vs 5.6 min median) and more often on weekends (36% vs 23%). They are 3× as likely to end where they started. | `outputs/rider_segments.csv` |
@@ -55,7 +55,7 @@ An end-to-end analysis of **1,002,331 bike-share trips** taken in Jersey City an
 A few station IDs appear under more than one spelling of the name. The `stations` table uses the most common spelling for each ID.
 
 **Metrics.**
-- *Net per morning* = (arrivals − departures) between 7:00 and 9:59 on weekdays, divided by the 261 weekdays in 2025.
+- *Net per morning* = (arrivals - departures) between 7:00 and 9:59 on weekdays, divided by the 261 weekdays in 2025.
 - *Distance* is the straight-line (haversine) distance between the start and end stations, so it understates the distance actually ridden.
 - *Rides per hour* on the heatmap divides by the number of times each weekday occurred in 2025.
 
@@ -90,7 +90,10 @@ citibike-jersey-city/
 │   └── 08_city_flows.sql
 ├── outputs/                # query results (CSV)
 ├── charts/                 # static charts (PNG)
-└── dashboard/              # interactive page (Chart.js + Leaflet), reads data.json
+├── dashboard/              # interactive page (Chart.js + Leaflet), reads data.json
+├── data/                   # raw CSVs + DuckDB file, created by the pipeline (git-ignored)
+├── requirements.txt
+└── README.md
 ```
 
 ## Reproduce it
