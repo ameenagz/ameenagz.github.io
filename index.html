@@ -378,6 +378,8 @@
   }
   .pcard-tech span{display:block}
   .pcard-link{margin-top:auto;padding-top:2rem;font-size:var(--step-0);align-self:flex-start}
+  .pcard .pcard-links{margin-top:auto;padding-top:2rem;display:flex;flex-wrap:wrap;gap:0.4rem 1.6rem}
+  .pcard-links .pcard-link{padding-top:0}
 
   /* ---------- skills schema ---------- */
   .skills{padding-block:clamp(4rem,10vh,6rem)}
@@ -638,6 +640,19 @@
       <h2 id="proj-h" data-wipe>Projects</h2>
     </div>
     <div class="stack">
+
+      <article class="pcard">
+        <div class="pcard-top">
+          <h3>Citi Bike Demand &amp; Rebalancing</h3>
+          <span class="pcard-kind">Personal project</span>
+        </div>
+        <p>Cleaned and analyzed 1M+ 2025 bike-share trips in Jersey City and Hoboken with DuckDB SQL, and found that Grove St PATH gains about 53 bikes every weekday morning. Turned the results into rebalancing recommendations and an interactive dashboard.</p>
+        <p class="pcard-tech mono"><span>SQL</span><span>Python</span><span>DuckDB</span><span>Chart.js</span></p>
+        <p class="pcard-links">
+          <a class="pcard-link" href="projects/citibike-jersey-city/dashboard/">View dashboard</a>
+          <a class="pcard-link" href="https://github.com/ameenagz/ameenagz.github.io/tree/main/projects/citibike-jersey-city" target="_blank" rel="noopener">View on GitHub</a>
+        </p>
+      </article>
 
       <article class="pcard">
         <div class="pcard-top">
