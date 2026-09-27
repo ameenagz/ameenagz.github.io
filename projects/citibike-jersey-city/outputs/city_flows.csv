@@ -1,0 +1,5 @@
+from_city,to_city,rides,share
+Jersey City,Jersey City,477569,0.48
+Hoboken,Hoboken,386207,0.388
+Jersey City,Hoboken,66514,0.067
+Hoboken,Jersey City,64709,0.065
