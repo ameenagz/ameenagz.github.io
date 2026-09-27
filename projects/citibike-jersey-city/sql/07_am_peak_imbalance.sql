@@ -24,4 +24,4 @@ SELECT
 FROM stations s
 LEFT JOIN dep USING (station_id)
 LEFT JOIN arr USING (station_id)
-ORDER BY net_per_morning DESC;
+ORDER BY net_per_morning DESC, s.station_name;

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Citi Bike Jersey City 2025 | Ameen Aghazadeh</title>
 <meta name="description" content="Interactive dashboard: one year of Citi Bike trips in Jersey City and Hoboken, with commuting patterns and station rebalancing needs.">
-<meta name="theme-color" content="#EDEAE3">
+<meta name="theme-color" content="#F6F8FB">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet">
@@ -14,8 +14,8 @@
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root{
-    --paper:#EDEAE3; --card:#F6F4EF; --ink:#14191F; --steel:#5C6873; --rule:#CFCBC1;
-    --amber:#D9A425; --blue:#1C5D82; --gain:#0F766E; --loss:#C2410C;
+    --paper:#F6F8FB; --card:#FFFFFF; --ink:#102033; --steel:#55627A; --rule:#D6DDE7;
+    --accent:#14B8A6; --blue:#1D4ED8; --gain:#0D9488; --loss:#E11D48;
     --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
     --mono:var(--sans);
   }
@@ -48,7 +48,7 @@
   .heat .hr{aspect-ratio:auto;text-align:center}
   .findings{counter-reset:f;list-style:none;padding:0;margin:0;display:grid;gap:.8rem}
   .findings li{counter-increment:f;background:var(--card);border:1px solid var(--rule);padding:.9rem 1rem .9rem 3rem;position:relative}
-  .findings li::before{content:counter(f,decimal-leading-zero);position:absolute;left:1rem;top:.9rem;font-family:var(--mono);color:var(--amber);font-weight:500}
+  .findings li::before{content:counter(f,decimal-leading-zero);position:absolute;left:1rem;top:.9rem;font-family:var(--mono);color:var(--accent);font-weight:500}
   footer{border-top:1px solid var(--rule);padding:1.5rem 0 3rem;font-family:var(--mono);font-size:.76rem;color:var(--steel)}
   footer a{color:var(--blue)}
   .err{background:#fee2e2;border:1px solid #fca5a5;padding:1rem;display:none}
@@ -84,7 +84,7 @@
 
   <section>
     <h2>Where bikes pile up each weekday morning</h2>
-    <p class="note">Net bikes gained per weekday, 7:00 to 9:59am (arrivals minus departures). Teal stations fill up and run out of open docks. Orange stations empty out and run out of bikes. Circle size shows how big the imbalance is.</p>
+    <p class="note">Net bikes gained per weekday, 7:00 to 9:59am (arrivals minus departures). Teal stations fill up and run out of open docks. Red stations empty out and run out of bikes. Circle size shows how big the imbalance is.</p>
     <div id="map" role="img" aria-label="Map of station imbalance during the weekday morning peak"></div>
     <div class="legend">
       <span><i class="dot" style="background:var(--gain)"></i>Gains bikes (fills up)</span>
@@ -118,7 +118,7 @@
     </div>
     <div class="panel">
       <h2>Busiest stations</h2>
-      <p class="note">Departures + arrivals, full year. Blue = Jersey City, amber = Hoboken.</p>
+      <p class="note">Departures + arrivals, full year. Blue = Jersey City, teal = Hoboken.</p>
       <div class="chart"><canvas id="stations"></canvas></div>
     </div>
   </section>
@@ -129,7 +129,7 @@
 </div>
 
 <script>
-const C = {ink:'#14191F', steel:'#5C6873', rule:'#CFCBC1', blue:'#1C5D82', amber:'#D9A425', gain:'#0F766E', loss:'#C2410C'};
+const C = {ink:'#102033', steel:'#55627A', rule:'#D6DDE7', blue:'#1D4ED8', accent:'#14B8A6', gain:'#0D9488', loss:'#E11D48'};
 const fmt = n => n.toLocaleString('en-US');
 const pct = n => Math.round(n * 100) + '%';
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
@@ -194,7 +194,7 @@ function render(d) {
       labels: months.map(m => mName(m.month).slice(0, 3)),
       datasets: [
         {label: 'Member', data: months.map(m => m.member_rides), backgroundColor: C.blue},
-        {label: 'Casual', data: months.map(m => m.casual_rides), backgroundColor: C.amber},
+        {label: 'Casual', data: months.map(m => m.casual_rides), backgroundColor: C.accent},
       ],
     },
     options: {
@@ -231,7 +231,7 @@ function render(d) {
     html += `<span class="lbl">${DAYS[dow - 1]}</span>`;
     for (let h = 0; h < 24; h++) {
       const v = lookup[`${dow}-${h}`] || 0;
-      html += `<div style="background:rgba(28,93,130,${(0.05 + 0.95 * v / max).toFixed(3)})" title="${DAYS[dow - 1]} ${h}:00: ${v} rides/hour"></div>`;
+      html += `<div style="background:rgba(29,78,216,${(0.05 + 0.95 * v / max).toFixed(3)})" title="${DAYS[dow - 1]} ${h}:00: ${v} rides/hour"></div>`;
     }
   }
   heat.innerHTML = html;
@@ -245,7 +245,7 @@ function render(d) {
       datasets: ['member', 'casual'].map(t => ({
         label: t === 'member' ? `Member (${segs[t].median_duration_min} min median)` : `Casual (${segs[t].median_duration_min} min median)`,
         data: segMetrics.map(m => segs[t][m[0]] * 100),
-        backgroundColor: t === 'member' ? C.blue : C.amber,
+        backgroundColor: t === 'member' ? C.blue : C.accent,
       })),
     },
     options: {
@@ -260,7 +260,7 @@ function render(d) {
     type: 'bar',
     data: {
       labels: ts.map(s => s.station_name.length > 26 ? s.station_name.slice(0, 25) + '…' : s.station_name),
-      datasets: [{data: ts.map(s => s.total_activity), backgroundColor: ts.map(s => s.city === 'Hoboken' ? C.amber : C.blue)}],
+      datasets: [{data: ts.map(s => s.total_activity), backgroundColor: ts.map(s => s.city === 'Hoboken' ? C.accent : C.blue)}],
     },
     options: {
       indexAxis: 'y',
