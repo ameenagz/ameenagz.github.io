@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b172a'/%3E%3Cpath d='M12 47 27 15h10l15 32H41l-3-8H25l-3 8H12Zm16-17h7l-3.5-9L28 30Z' fill='%23f5c451'/%3E%3C/svg%3E"><meta name="theme-color" content="%230b172a"><meta charset="utf-8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b172a'/%3E%3Cpath d='M12 47 27 15h10l15 32H41l-3-8H25l-3 8H12Zm16-17h7l-3.5-9L28 30Z' fill='%23f5c451'/%3E%3C/svg%3E"><meta name="theme-color" content="#0b172a"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ameen Aghazadeh | Data Analyst</title>
 <meta name="description" content="Data analyst with an M.S. in Information Systems (Data Science) and hands-on SQL experience structuring and validating large record sets. Greater Philadelphia / South Jersey.">
@@ -11,13 +11,16 @@
 <meta property="og:description" content="Data analyst with an M.S. in Information Systems (Data Science) and hands-on SQL experience structuring and validating large record sets.">
 <meta property="og:site_name" content="Ameen Aghazadeh">
 <meta property="og:locale" content="en_US">
-<!-- Uncomment and fill once the site is live, so link previews resolve:
 <meta property="og:url" content="https://ameenagz.github.io/">
 <meta property="og:image" content="https://ameenagz.github.io/preview.png">
--->
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ameen Aghazadeh, data analyst">
+<link rel="canonical" href="https://ameenagz.github.io/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Ameen Aghazadeh | Data Analyst">
 <meta name="twitter:description" content="Data analyst with an M.S. in Information Systems (Data Science) and hands-on SQL experience structuring and validating large record sets.">
+<meta name="twitter:image" content="https://ameenagz.github.io/preview.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -382,6 +385,58 @@
   .pcard .pcard-links{margin-top:auto;padding-top:2rem;display:flex;flex-wrap:wrap;gap:0.4rem 1.6rem}
   .pcard-links .pcard-link{padding-top:0}
 
+  /* ---------- live sql ---------- */
+  .sql{padding-block:clamp(3rem,8vh,5rem) clamp(4rem,10vh,6rem)}
+  .sql-lede{max-width:var(--measure);color:var(--steel);margin-bottom:clamp(1.6rem,4vh,2.4rem)}
+  .sql-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:1.6rem}
+  @media (min-width:960px){ .sql-grid{grid-template-columns:minmax(0,1fr) 15.5rem} }
+  .sql-presets{display:flex;flex-wrap:wrap;gap:0.45rem;margin-bottom:0.9rem}
+  .sql-presets button,.sql-run,.sql-tables button{font:inherit;font-size:var(--step--1);cursor:pointer;border-radius:2px}
+  .sql-presets button{
+    background:transparent;color:var(--ink);border:1px solid var(--rule);
+    padding:0.4rem 0.75rem;min-height:36px;
+  }
+  .sql-presets button:hover{border-color:var(--ink)}
+  .sql-presets button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .sql-box{border:1px solid var(--rule);border-radius:2px;background:#F6F4EF;overflow:hidden}
+  .sql-box:focus-within{border-color:var(--ink)}
+  .sql-edit{
+    display:block;width:100%;min-height:15rem;resize:vertical;border:0;margin:0;
+    padding:1rem 1.1rem;background:transparent;color:var(--ink);
+    font-family:var(--mono);font-size:0.86rem;line-height:1.6;tab-size:2;
+    white-space:pre;overflow:auto;
+  }
+  .sql-edit:focus{outline:none}
+  .sql-bar{
+    display:flex;flex-wrap:wrap;align-items:center;gap:0.6rem 1rem;
+    padding:0.6rem 0.75rem;border-top:1px solid var(--rule);
+  }
+  .sql-run{background:var(--ink);color:var(--paper);border:0;padding:0.5rem 1.1rem;min-height:38px;font-weight:600}
+  .sql-run:hover{background:var(--blue)}
+  .sql-run:disabled{opacity:0.5;cursor:wait}
+  .sql-hint,.sql-status{font-family:var(--mono);font-size:0.74rem;color:var(--steel)}
+  .sql-status{margin-left:auto}
+  .sql-status.err{color:#B42318}
+  .sql-out{margin-top:1rem;border:1px solid var(--rule);border-radius:2px;height:21rem;overflow:auto}
+  .sql-out table{border-collapse:collapse;width:100%;font-size:0.84rem}
+  .sql-out th,.sql-out td{padding:0.45rem 0.8rem;text-align:left;white-space:nowrap;border-bottom:1px solid var(--rule)}
+  .sql-out th{
+    position:sticky;top:0;background:var(--ink);color:var(--paper);
+    font-family:var(--mono);font-weight:500;font-size:0.74rem;
+  }
+  .sql-out .num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .sql-out td.null{color:var(--steel);font-style:italic}
+  .sql-out tbody tr:hover{background:rgba(217,164,37,0.1)}
+  .sql-msg{padding:1.2rem;color:var(--steel);font-size:var(--step--1)}
+  .sql-msg.err{color:#B42318;font-family:var(--mono);white-space:pre-wrap}
+  .sql-side h3{font-size:var(--step-0);padding-bottom:0.6rem;border-bottom:1px solid var(--rule)}
+  .sql-tables{margin-top:0.9rem;display:flex;flex-direction:column;gap:1rem}
+  .sql-tables button{background:none;border:0;padding:0;color:var(--blue);font-family:var(--mono);font-weight:500}
+  .sql-tables button:hover{text-decoration:underline}
+  .sql-tables ul{margin-top:0.3rem;display:flex;flex-wrap:wrap;gap:0.1rem 0.7rem}
+  .sql-tables li{font-family:var(--mono);font-size:0.74rem;color:var(--steel)}
+  .sql-note{margin-top:1.2rem;font-size:var(--step--1);color:var(--steel);line-height:1.45}
+
   /* ---------- skills schema ---------- */
   .skills{padding-block:clamp(4rem,10vh,6rem)}
   .schema{border:1px solid var(--rule);border-radius:2px;overflow:hidden}
@@ -465,6 +520,7 @@
     <nav class="bar-nav" aria-label="Sections">
       <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
+      <a href="#sql">Live SQL</a>
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -678,6 +734,36 @@
     </div>
   </section>
 
+  <!-- LIVE SQL -->
+  <section class="sql wrap" id="sql" aria-labelledby="sql-h">
+    <div class="head">
+      <h2 id="sql-h" data-wipe>Query my data</h2>
+    </div>
+    <p class="sql-lede">Run real SQL against a year of Citi Bike trips from my project above. The database runs in your browser, so nothing is sent anywhere. Pick an example or write your own.</p>
+    <div class="sql-grid">
+      <div>
+        <div class="sql-presets" id="sql-presets" role="group" aria-label="Example queries"></div>
+        <div class="sql-box">
+          <label class="sr-only" for="sql-edit">SQL query</label>
+          <textarea class="sql-edit" id="sql-edit" spellcheck="false" autocapitalize="off" autocomplete="off" data-lenis-prevent></textarea>
+          <div class="sql-bar">
+            <button class="sql-run" id="sql-run" type="button">Run query</button>
+            <span class="sql-hint">Ctrl/Cmd + Enter</span>
+            <span class="sql-status" id="sql-status" role="status" aria-live="polite"></span>
+          </div>
+        </div>
+        <div class="sql-out" id="sql-out" tabindex="0" role="region" aria-label="Query results" data-lenis-prevent>
+          <p class="sql-msg">Results will appear here.</p>
+        </div>
+      </div>
+      <aside class="sql-side" aria-labelledby="sql-tables-h">
+        <h3 id="sql-tables-h">Tables</h3>
+        <div class="sql-tables" id="sql-tables"></div>
+        <p class="sql-note">SQLite dialect. Summaries built from 1,002,331 trips, Jan to Dec 2025. Click a table name to preview it.</p>
+      </aside>
+    </div>
+  </section>
+
   <!-- SKILLS -->
   <section class="skills wrap" id="skills" aria-labelledby="skills-h">
     <div class="head">
@@ -775,6 +861,191 @@
   </div>
 </footer>
 
+<script>
+/* Live SQL: loads sql.js and the Citi Bike summary database only when the section gets close. */
+(function () {
+  var BASE = 'assets/vendor/sql.js/';
+  var DB_URL = 'projects/citibike-jersey-city/playground/citibike.sqlite';
+  var MAX_ROWS = 500;
+  var QUERIES = [
+    [
+      "Busiest routes",
+      "-- Top 10 station-to-station routes, with names from the stations table\nSELECT s1.station_name AS from_station,\n       s2.station_name AS to_station,\n       r.rides,\n       r.median_duration_min\nFROM routes r\nJOIN stations s1 ON s1.station_id = r.start_station_id\nJOIN stations s2 ON s2.station_id = r.end_station_id\nWHERE r.start_station_id <> r.end_station_id\nORDER BY r.rides DESC\nLIMIT 10;"
+    ],
+    [
+      "Month over month",
+      "-- Monthly rides and % change vs. the previous month (window function)\nWITH monthly AS (\n  SELECT substr(date, 1, 7) AS month, SUM(rides) AS rides\n  FROM daily\n  GROUP BY month\n)\nSELECT month,\n       rides,\n       ROUND(100.0 * (rides - LAG(rides) OVER (ORDER BY month))\n             / LAG(rides) OVER (ORDER BY month), 1) AS pct_change\nFROM monthly\nORDER BY month;"
+    ],
+    [
+      "Rush hour",
+      "-- Busiest hour of each day, weekdays vs. weekends\nWITH totals AS (\n  SELECT weekday_num, weekday, hour, SUM(rides) AS rides\n  FROM hourly\n  GROUP BY weekday_num, weekday, hour\n),\nranked AS (\n  SELECT *, RANK() OVER (PARTITION BY weekday_num ORDER BY rides DESC) AS rnk\n  FROM totals\n)\nSELECT weekday, hour || ':00' AS peak_hour, rides\nFROM ranked\nWHERE rnk = 1\nORDER BY weekday_num;"
+    ],
+    [
+      "Record days",
+      "-- The 10 busiest days of 2025 and who was riding\nSELECT date,\n       weekday,\n       rides,\n       ROUND(100.0 * casual_rides / rides, 1) AS casual_pct,\n       ROUND(100.0 * ebike_rides / rides, 1)  AS ebike_pct\nFROM daily\nORDER BY rides DESC\nLIMIT 10;"
+    ],
+    [
+      "Leisure stations",
+      "-- Stations where casual riders make up the biggest share of departures\nSELECT s.station_name,\n       s.city,\n       SUM(r.rides) AS departures,\n       ROUND(100.0 * SUM(r.casual_rides) / SUM(r.rides), 1) AS casual_pct\nFROM routes r\nJOIN stations s ON s.station_id = r.start_station_id\nGROUP BY s.station_id\nHAVING departures >= 2000\nORDER BY casual_pct DESC\nLIMIT 10;"
+    ],
+    [
+      "Between cities",
+      "-- How many rides stay within a city vs. cross between Hoboken and Jersey City\nSELECT a.city AS from_city,\n       b.city AS to_city,\n       SUM(r.rides) AS rides,\n       ROUND(100.0 * SUM(r.rides) / (SELECT SUM(rides) FROM routes), 1) AS pct\nFROM routes r\nJOIN stations a ON a.station_id = r.start_station_id\nJOIN stations b ON b.station_id = r.end_station_id\nGROUP BY from_city, to_city\nORDER BY rides DESC;"
+    ]
+  ];
+  var TABLES = [
+    ['stations', ['station_id', 'station_name', 'city', 'lat', 'lng']],
+    ['daily', ['date', 'weekday', 'rides', 'member_rides', 'casual_rides', 'ebike_rides', 'median_duration_min']],
+    ['hourly', ['weekday_num', 'weekday', 'hour', 'rider_type', 'rides']],
+    ['routes', ['start_station_id', 'end_station_id', 'rides', 'member_rides', 'casual_rides', 'median_duration_min']]
+  ];
+
+  var section = document.getElementById('sql');
+  if (!section) return;
+  var editor = document.getElementById('sql-edit');
+  var runBtn = document.getElementById('sql-run');
+  var statusEl = document.getElementById('sql-status');
+  var out = document.getElementById('sql-out');
+  var presets = document.getElementById('sql-presets');
+  var tablesEl = document.getElementById('sql-tables');
+  var dbPromise = null;
+
+  function esc(v) {
+    return String(v).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function setStatus(text, isErr) {
+    statusEl.textContent = text;
+    statusEl.classList.toggle('err', !!isErr);
+  }
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = function () { reject(new Error('Could not load the SQL engine')); };
+      document.head.appendChild(s);
+    });
+  }
+  function loadDb() {
+    if (dbPromise) return dbPromise;
+    setStatus('Loading database...');
+    var t0 = performance.now();
+    dbPromise = Promise.all([
+      loadScript(BASE + 'sql-wasm.js').then(function () {
+        return window.initSqlJs({ locateFile: function (f) { return BASE + f; } });
+      }),
+      fetch(DB_URL).then(function (r) {
+        if (!r.ok) throw new Error('Could not load the database (' + r.status + ')');
+        return r.arrayBuffer();
+      })
+    ]).then(function (res) {
+      var db = new res[0].Database(new Uint8Array(res[1]));
+      db.run('PRAGMA query_only = ON');  // visitors can explore but not drop or change tables
+      setStatus('Database ready in ' + Math.round(performance.now() - t0) + ' ms');
+      return db;
+    });
+    dbPromise.catch(function (e) {
+      dbPromise = null;
+      setStatus(e.message, true);
+      out.innerHTML = '<p class="sql-msg err">' + esc(e.message) + '. Refresh the page to try again.</p>';
+    });
+    return dbPromise;
+  }
+
+  function render(result) {
+    if (!result) {
+      out.innerHTML = '<p class="sql-msg">The query ran and returned no rows.</p>';
+      return 0;
+    }
+    var cols = result.columns, rows = result.values;
+    var numeric = cols.map(function (_, i) {
+      return rows.every(function (r) { return r[i] === null || typeof r[i] === 'number'; });
+    });
+    var html = '<table><thead><tr>' + cols.map(function (c, i) {
+      return '<th scope="col"' + (numeric[i] ? ' class="num"' : '') + '>' + esc(c) + '</th>';
+    }).join('') + '</tr></thead><tbody>';
+    rows.slice(0, MAX_ROWS).forEach(function (r) {
+      html += '<tr>' + r.map(function (v) {
+        if (v === null) return '<td class="null">NULL</td>';
+        if (typeof v === 'number') {
+          return '<td class="num">' + esc(v.toLocaleString('en-US', { maximumFractionDigits: 4 })) + '</td>';
+        }
+        return '<td>' + esc(v) + '</td>';
+      }).join('') + '</tr>';
+    });
+    out.innerHTML = html + '</tbody></table>';
+    out.scrollTop = 0;
+    out.scrollLeft = 0;
+    return rows.length;
+  }
+
+  function run() {
+    var sql = editor.value.trim();
+    if (!sql) return;
+    runBtn.disabled = true;
+    loadDb().then(function (db) {
+      var t0 = performance.now();
+      try {
+        var results = db.exec(sql);
+        var ms = (performance.now() - t0).toFixed(1);
+        var n = render(results[results.length - 1]);
+        setStatus(n.toLocaleString('en-US') + (n === 1 ? ' row' : ' rows') +
+          (n > MAX_ROWS ? ' (showing first ' + MAX_ROWS + ')' : '') + ' in ' + ms + ' ms');
+      } catch (e) {
+        out.innerHTML = '<p class="sql-msg err">' + esc(e.message) + '</p>';
+        setStatus('Query failed', true);
+      }
+    }, function () {}).then(function () { runBtn.disabled = false; });
+  }
+
+  function press(i) {
+    [].forEach.call(presets.children, function (b, j) { b.setAttribute('aria-pressed', String(i === j)); });
+  }
+
+  QUERIES.forEach(function (q, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = q[0];
+    b.addEventListener('click', function () { editor.value = q[1]; press(i); run(); });
+    presets.appendChild(b);
+  });
+  editor.value = QUERIES[0][1];
+  press(0);
+
+  tablesEl.innerHTML = TABLES.map(function (t) {
+    return '<div><button type="button" data-t="' + t[0] + '">' + t[0] + '</button><ul>' +
+      t[1].map(function (c) { return '<li>' + c + '</li>'; }).join('') + '</ul></div>';
+  }).join('');
+  tablesEl.addEventListener('click', function (e) {
+    var t = e.target.getAttribute && e.target.getAttribute('data-t');
+    if (!t) return;
+    editor.value = 'SELECT *\nFROM ' + t + '\nLIMIT 20;';
+    press(-1);
+    run();
+  });
+
+  runBtn.addEventListener('click', run);
+  editor.addEventListener('input', function () { press(-1); });
+  editor.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      run();
+    }
+  });
+
+  // Load and run the first example once the section is near the viewport.
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { io.disconnect(); run(); }
+    }, { rootMargin: '300px 0px' });
+    io.observe(section);
+  } else {
+    run();
+  }
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>

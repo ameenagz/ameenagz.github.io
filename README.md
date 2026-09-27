@@ -10,10 +10,16 @@ Personal portfolio of **Ameen Aghazadeh**, data analyst. Live at **https://ameen
 | **Chicago Crime Analysis** | SQLite database built from public crime, census and school data, analyzed with SQL joins and aggregations | [Repo](https://github.com/ameenagz/sql-python-chicago-crime-analysis) |
 | **Post-HCT Survival Prediction** | Kaplan-Meier survival analysis on 28,800 transplant records | [Repo](https://github.com/ameenagz/equity-post-HCT-survival-predictions) |
 
+## Live SQL
+
+The homepage has a **Query my data** section where visitors can run SQL against a summary of the Citi Bike data. It uses [sql.js](https://github.com/sql-js/sql.js) (SQLite compiled to WebAssembly), so queries run in the browser with no server. The database is built by `projects/citibike-jersey-city/pipeline/04_export_sqlite.py`.
+
 ## Repository layout
 
 ```
 ├── index.html                      # the portfolio site (single page, no build step)
+├── preview.png                     # link preview image for LinkedIn, iMessage, etc.
+├── assets/vendor/sql.js/           # SQLite in the browser, for the Live SQL section (MIT license)
 └── projects/
     └── citibike-jersey-city/       # full project: pipeline, SQL, charts, dashboard (see its README)
 ```
