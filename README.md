@@ -10,6 +10,10 @@ Personal portfolio of **Ameen Aghazadeh**, data analyst. Live at **https://ameen
 | **Chicago Crime Analysis** | SQLite database built from public crime, census and school data, analyzed with SQL joins and aggregations | [Repo](https://github.com/ameenagz/sql-python-chicago-crime-analysis) |
 | **Post-HCT Survival Prediction** | Kaplan-Meier survival analysis on 28,800 transplant records | [Repo](https://github.com/ameenagz/equity-post-HCT-survival-predictions) |
 
+## Homepage animation
+
+The opening screen shows the real Citi Bike network: 110 stations at their actual positions and the busiest routes between them, with riders moving along each route in proportion to how often it was ridden in 2025. The data comes from `projects/citibike-jersey-city/playground/flows.json`. Clicking the animation opens the dashboard.
+
 ## Live SQL
 
 The homepage has a **Query my data** section where visitors can run SQL against a summary of the Citi Bike data. It uses [sql.js](https://github.com/sql-js/sql.js) (SQLite compiled to WebAssembly), so queries run in the browser with no server. The database is built by `projects/citibike-jersey-city/pipeline/04_export_sqlite.py`.

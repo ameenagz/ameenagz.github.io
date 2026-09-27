@@ -1,4 +1,7 @@
-"""Export compact summary tables to a SQLite file for the in-browser SQL playground."""
+"""Export compact summary tables for the website: a SQLite file for the in-browser SQL
+playground, and station positions plus the busiest routes for the homepage animation."""
+import json
+import math
 import sqlite3
 from pathlib import Path
 
@@ -6,6 +9,9 @@ import duckdb
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "playground" / "citibike.sqlite"
+FLOWS = ROOT / "playground" / "flows.json"
+TOP_ROUTES = 400
+PER_STATION = 3
 
 TABLES = {
     "stations": """
@@ -40,6 +46,54 @@ TABLES = {
 }
 
 
+def export_flows(src) -> None:
+    """Stations projected to a 0-1 box (north up) and the busiest routes between them."""
+    stations = src.sql("""
+        SELECT s.station_id, s.lat, s.lng, count(t.ride_id) AS departures
+        FROM stations s LEFT JOIN trips t ON t.start_station_id = s.station_id
+        GROUP BY ALL ORDER BY s.station_id
+    """).fetchall()
+    # The busiest routes overall, plus each station's own top routes so quieter
+    # neighborhoods still show up in the animation.
+    routes = src.sql(f"""
+        WITH pairs AS (
+            SELECT start_station_id, end_station_id, count(*) AS rides
+            FROM trips
+            WHERE NOT missing_end AND start_station_id <> end_station_id
+              AND end_station_id IN (SELECT station_id FROM stations)
+            GROUP BY ALL
+        ), ranked AS (
+            SELECT *,
+                   row_number() OVER (ORDER BY rides DESC, start_station_id, end_station_id) AS overall,
+                   row_number() OVER (PARTITION BY start_station_id
+                                      ORDER BY rides DESC, end_station_id) AS per_station
+            FROM pairs
+        )
+        SELECT start_station_id, end_station_id, rides
+        FROM ranked
+        WHERE overall <= {TOP_ROUTES} OR per_station <= {PER_STATION}
+        ORDER BY rides DESC, start_station_id, end_station_id
+    """).fetchall()
+
+    mid_lat = math.radians(sum(r[1] for r in stations) / len(stations))
+    xs = [r[2] * math.cos(mid_lat) for r in stations]
+    ys = [-r[1] for r in stations]
+    x0, y0 = min(xs), min(ys)
+    span = max(max(xs) - x0, max(ys) - y0)
+    top = max(r[3] for r in stations)
+    index = {r[0]: i for i, r in enumerate(stations)}
+    FLOWS.write_text(json.dumps({
+        "w": round((max(xs) - x0) / span, 3),
+        "h": round((max(ys) - y0) / span, 3),
+        # [x, y, activity 0-1] per station
+        "stations": [[round((x - x0) / span, 4), round((y - y0) / span, 4), round(r[3] / top, 3)]
+                     for x, y, r in zip(xs, ys, stations)],
+        # [from, to, rides] using station indexes
+        "routes": [[index[a], index[b], n] for a, b, n in routes],
+    }, separators=(",", ":")))
+    print(f"wrote {FLOWS.relative_to(ROOT)} ({FLOWS.stat().st_size / 1024:.0f} KB)")
+
+
 def main() -> None:
     src = duckdb.connect(str(ROOT / "data" / "citibike.duckdb"), read_only=True)
     OUT.parent.mkdir(exist_ok=True)
@@ -55,6 +109,7 @@ def main() -> None:
     dst.execute("VACUUM")
     dst.close()
     print(f"wrote {OUT.relative_to(ROOT)} ({OUT.stat().st_size / 1024:.0f} KB)")
+    export_flows(src)
 
 
 if __name__ == "__main__":

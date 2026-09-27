@@ -9,7 +9,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 OUT, CHARTS = ROOT / "outputs", ROOT / "charts"
 
-MEMBER, CASUAL, ACCENT, NEG = "#1D4ED8", "#14B8A6", "#0D9488", "#E11D48"
+MEMBER, CASUAL, ACCENT, NEG = "#1D4ED8", "#14B8A6", "#0D9488", "#6366F1"
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 plt.rcParams.update({

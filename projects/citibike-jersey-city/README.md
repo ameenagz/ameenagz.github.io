@@ -79,7 +79,7 @@ citibike-jersey-city/
 │   ├── 01_download.py      # fetch the 12 monthly zip files from Citi Bike's S3 bucket
 │   ├── 02_build_db.py      # load CSVs into DuckDB and run the cleaning SQL
 │   ├── 03_analyze.py       # run analysis SQL -> outputs/*.csv, charts/*.png, dashboard/data.json
-│   └── 04_export_sqlite.py # summary tables -> playground/citibike.sqlite for the Live SQL section
+│   └── 04_export_sqlite.py # playground/: SQLite for the Live SQL section, flows.json for the homepage animation
 ├── sql/
 │   ├── 01_clean.sql        # trips + stations tables
 │   ├── 02_kpis.sql
@@ -92,7 +92,7 @@ citibike-jersey-city/
 ├── outputs/                # query results (CSV)
 ├── charts/                 # static charts (PNG)
 ├── dashboard/              # interactive page (Chart.js + Leaflet), reads data.json
-├── playground/             # SQLite summary database used by the "Query my data" section of the site
+├── playground/             # data the homepage uses: SQLite for "Query my data", routes for the hero animation
 ├── data/                   # raw CSVs + DuckDB file, created by the pipeline (git-ignored)
 ├── requirements.txt
 └── README.md

@@ -172,25 +172,31 @@
   }
   .hero > *{position:relative;z-index:1}
 
-  /* three record tables joined by keys: the subject of the page, drawn */
-  .hero-schema{
-    position:absolute;z-index:0;pointer-events:none;
-    right:var(--edge);bottom:4.5rem;width:13rem;
+  /* real bike routes animated on a canvas (see the hero script) */
+  .hero::before{
+    content:"";position:absolute;z-index:0;pointer-events:none;
+    top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);
+    background-image:radial-gradient(rgba(var(--ink-rgb),0.12) 1px,transparent 1.3px);
+    background-size:24px 24px;
+    -webkit-mask-image:radial-gradient(ellipse 75% 70% at 70% 50%,#000 20%,transparent 75%);
+            mask-image:radial-gradient(ellipse 75% 70% at 70% 50%,#000 20%,transparent 75%);
   }
-  @media (min-width:640px){ .hero-schema{width:16rem;bottom:5.5rem} }
+  .hero-flow{
+    position:absolute;z-index:0;display:block;
+    right:var(--edge);bottom:3rem;width:min(20rem,62vw);aspect-ratio:0.9;
+    opacity:0;transition:opacity 1.2s ease 0.4s;pointer-events:none;
+  }
+  .hero-flow.is-ready{opacity:0.55}
+  .hero-flow canvas{display:block;width:100%;height:100%}
   @media (min-width:1150px){
-    .hero-schema{top:50%;bottom:auto;transform:translateY(-50%);width:min(25rem,34%)}
+    .hero-flow{
+      top:50%;bottom:auto;transform:translateY(-50%);
+      width:auto;height:min(78svh,40rem);max-width:44%;pointer-events:auto;
+      border-radius:4px;
+    }
+    .hero-flow.is-ready{opacity:1}
+    .hero-flow:hover canvas{filter:saturate(1.3)}
   }
-  .hero-schema svg{display:block;width:100%;height:auto}
-  html.js .hero-schema svg{opacity:0}
-
-  .sc-box{fill:none;stroke:rgba(var(--ink-rgb),0.32);stroke-width:1;vector-effect:non-scaling-stroke}
-  .sc-title{fill:rgba(var(--ink-rgb),0.4)}
-  .sc-head{fill:rgba(var(--ink-rgb),0.34)}
-  .sc-row{fill:rgba(var(--ink-rgb),0.18)}
-  .sc-key{fill:var(--accent)}
-  .sc-join{fill:none;stroke:var(--accent);stroke-width:1.25;vector-effect:non-scaling-stroke}
-  .sc-dot{fill:var(--accent)}
 
   .hero-name{
     font-size:var(--step-5);font-weight:700;
@@ -425,7 +431,7 @@
   .sql-run:disabled{opacity:0.5;cursor:wait}
   .sql-hint,.sql-status{font-family:var(--mono);font-size:0.74rem;color:var(--steel)}
   .sql-status{margin-left:auto}
-  .sql-status.err{color:#B42318}
+  .sql-status.err{color:#4338CA}
   .sql-out{margin-top:1rem;border:1px solid var(--rule);border-radius:2px;height:21rem;overflow:auto}
   .sql-out table{border-collapse:collapse;width:100%;font-size:0.84rem}
   .sql-out th,.sql-out td{padding:0.45rem 0.8rem;text-align:left;white-space:nowrap;border-bottom:1px solid var(--rule)}
@@ -437,7 +443,7 @@
   .sql-out td.null{color:var(--steel);font-style:italic}
   .sql-out tbody tr:hover{background:rgba(var(--accent-rgb),0.1)}
   .sql-msg{padding:1.2rem;color:var(--steel);font-size:var(--step--1)}
-  .sql-msg.err{color:#B42318;font-family:var(--mono);white-space:pre-wrap}
+  .sql-msg.err{color:#4338CA;font-family:var(--mono);white-space:pre-wrap}
   .sql-side h3{font-size:var(--step-0);padding-bottom:0.6rem;border-bottom:1px solid var(--rule)}
   .sql-tables{margin-top:0.9rem;display:flex;flex-direction:column;gap:1rem}
   .sql-tables button{background:none;border:0;padding:0;color:var(--blue);font-family:var(--mono);font-weight:500}
@@ -541,45 +547,9 @@
 
   <!-- HERO -->
   <section class="hero wrap" id="top">
-    <div class="hero-schema" aria-hidden="true">
-      <svg viewBox="0 0 452 312" fill="none" focusable="false" role="presentation">
-        <path class="sc-box" d="M6 18 H182 V122 H6 Z"/>
-        <rect class="sc-title" x="16" y="27" width="64" height="4.5"/>
-        <rect class="sc-head" x="6" y="43" width="176" height="1.6"/>
-        <rect class="sc-key" x="14" y="55.5" width="6" height="6"/>
-        <rect class="sc-row" x="28" y="58" width="112" height="1.5"/>
-        <rect class="sc-row" x="28" y="74" width="136" height="1.5"/>
-        <rect class="sc-row" x="28" y="90" width="92" height="1.5"/>
-        <rect class="sc-row" x="28" y="106" width="124" height="1.5"/>
-
-        <path class="sc-box" d="M262 78 H438 V196 H262 Z"/>
-        <rect class="sc-title" x="272" y="87" width="56" height="4.5"/>
-        <rect class="sc-head" x="262" y="103" width="176" height="1.6"/>
-        <rect class="sc-key" x="270" y="115.5" width="6" height="6"/>
-        <rect class="sc-row" x="284" y="118" width="120" height="1.5"/>
-        <rect class="sc-row" x="284" y="134" width="98" height="1.5"/>
-        <rect class="sc-row" x="284" y="150" width="134" height="1.5"/>
-        <rect class="sc-row" x="284" y="166" width="106" height="1.5"/>
-        <rect class="sc-row" x="284" y="182" width="88" height="1.5"/>
-
-        <path class="sc-box" d="M60 176 H236 V294 H60 Z"/>
-        <rect class="sc-title" x="70" y="185" width="58" height="4.5"/>
-        <rect class="sc-head" x="60" y="201" width="176" height="1.6"/>
-        <rect class="sc-key" x="68" y="213.5" width="6" height="6"/>
-        <rect class="sc-row" x="82" y="216" width="104" height="1.5"/>
-        <rect class="sc-row" x="82" y="232" width="132" height="1.5"/>
-        <rect class="sc-row" x="82" y="248" width="90" height="1.5"/>
-        <rect class="sc-row" x="82" y="264" width="118" height="1.5"/>
-        <rect class="sc-row" x="82" y="280" width="100" height="1.5"/>
-
-        <path class="sc-join" d="M182 58.5 H222 V118.5 H262"/>
-        <path class="sc-join" d="M236 216.5 H250 V182.5 H262"/>
-        <circle class="sc-dot" cx="182" cy="58.5" r="2.6"/>
-        <circle class="sc-dot" cx="262" cy="118.5" r="2.6"/>
-        <circle class="sc-dot" cx="236" cy="216.5" r="2.6"/>
-        <circle class="sc-dot" cx="262" cy="182.5" r="2.6"/>
-      </svg>
-    </div>
+    <a class="hero-flow" href="projects/citibike-jersey-city/dashboard/" aria-label="Animated map of real Citi Bike rides in Jersey City and Hoboken. Opens the dashboard.">
+      <canvas aria-hidden="true"></canvas>
+    </a>
     <h1 class="hero-name" data-split="char">Ameen Aghazadeh</h1>
     <p class="hero-lede">Data analyst. I structure and validate large record sets.</p>
     <p class="hero-meta mono">
@@ -870,6 +840,140 @@
   </div>
 </footer>
 
+<script>
+/* Hero: real Citi Bike routes (Jersey City + Hoboken, 2025) drawn on a canvas, with riders
+   travelling along them, weighted by how often each route was ridden. */
+(function () {
+  var link = document.querySelector('.hero-flow');
+  var canvas = link && link.querySelector('canvas');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var INK = '16,32,51', TEAL = '20,184,166';
+  var data, pts = [], routes = [], cum = [], total = 0;
+  var riders = [], pulses = [], W = 0, H = 0, dpr = 1, running = false, visible = true, last = 0;
+
+  function project() {
+    var r = canvas.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = r.width; H = r.height;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var pad = 10, s = Math.min((W - 2 * pad) / data.w, (H - 2 * pad) / data.h);
+    var ox = (W - data.w * s) / 2, oy = (H - data.h * s) / 2;
+    pts = data.stations.map(function (p) { return { x: ox + p[0] * s, y: oy + p[1] * s, a: p[2], glow: 0 }; });
+    routes = data.routes.map(function (r) {
+      var a = pts[r[0]], b = pts[r[1]], dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1;
+      var bend = Math.min(len * 0.18, 26);  // curve every route slightly so paths don't overlap
+      return { a: a, b: b, n: r[2], len: len,
+               cx: (a.x + b.x) / 2 - dy / len * bend, cy: (a.y + b.y) / 2 + dx / len * bend };
+    });
+  }
+
+  function at(r, t) {
+    var u = 1 - t;
+    return { x: u * u * r.a.x + 2 * u * t * r.cx + t * t * r.b.x,
+             y: u * u * r.a.y + 2 * u * t * r.cy + t * t * r.b.y };
+  }
+
+  function pick() {
+    var x = Math.random() * total, lo = 0, hi = cum.length - 1;
+    while (lo < hi) { var m = (lo + hi) >> 1; if (cum[m] < x) lo = m + 1; else hi = m; }
+    return routes[lo];
+  }
+
+  function spawn(t0) {
+    var r = pick();
+    riders.push({ r: r, t: t0 || 0, v: 1 / (900 + r.len * 22) });
+  }
+
+  function drawBase() {
+    ctx.clearRect(0, 0, W, H);
+    var maxN = routes.length ? routes[0].n : 1;
+    ctx.lineWidth = 1;
+    routes.forEach(function (r) {
+      ctx.strokeStyle = 'rgba(' + INK + ',' + (0.035 + 0.1 * r.n / maxN).toFixed(3) + ')';
+      ctx.beginPath(); ctx.moveTo(r.a.x, r.a.y); ctx.quadraticCurveTo(r.cx, r.cy, r.b.x, r.b.y); ctx.stroke();
+    });
+    pts.forEach(function (p) {
+      ctx.fillStyle = 'rgba(' + INK + ',' + (0.35 + 0.4 * p.a).toFixed(3) + ')';
+      ctx.beginPath(); ctx.arc(p.x, p.y, 1.4 + 3.2 * p.a, 0, 6.2832); ctx.fill();
+      if (p.glow > 0) {
+        ctx.fillStyle = 'rgba(' + TEAL + ',' + (0.8 * p.glow).toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(p.x, p.y, 1.6 + 3.2 * p.a, 0, 6.2832); ctx.fill();
+      }
+    });
+  }
+
+  function frame(now) {
+    if (!running) return;
+    var dt = Math.min(now - (last || now), 50); last = now;
+    drawBase();
+    for (var i = riders.length - 1; i >= 0; i--) {
+      var k = riders[i]; k.t += k.v * dt;
+      if (k.t >= 1) {
+        k.r.b.glow = 1;
+        pulses.push({ x: k.r.b.x, y: k.r.b.y, life: 1 });
+        riders.splice(i, 1); spawn(); continue;
+      }
+      var tail = Math.max(0, k.t - 0.22), steps = 8, prev = at(k.r, tail);
+      for (var j = 1; j <= steps; j++) {
+        var p = at(k.r, tail + (k.t - tail) * j / steps);
+        ctx.strokeStyle = 'rgba(' + TEAL + ',' + (0.75 * j / steps).toFixed(3) + ')';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+        prev = p;
+      }
+      ctx.fillStyle = 'rgb(' + TEAL + ')';
+      ctx.beginPath(); ctx.arc(prev.x, prev.y, 2.1, 0, 6.2832); ctx.fill();
+    }
+    for (var q = pulses.length - 1; q >= 0; q--) {
+      var pu = pulses[q]; pu.life -= dt / 900;
+      if (pu.life <= 0) { pulses.splice(q, 1); continue; }
+      ctx.strokeStyle = 'rgba(' + TEAL + ',' + (0.5 * pu.life).toFixed(3) + ')';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(pu.x, pu.y, 3 + (1 - pu.life) * 14, 0, 6.2832); ctx.stroke();
+    }
+    pts.forEach(function (p) { if (p.glow > 0) p.glow = Math.max(0, p.glow - dt / 700); });
+    requestAnimationFrame(frame);
+  }
+
+  function setRunning() {
+    var go = !still && visible && !document.hidden;
+    if (go && !running) { running = true; last = 0; requestAnimationFrame(frame); }
+    else if (!go) running = false;
+  }
+
+  function start(json) {
+    data = json;
+    project();
+    // Weight riders by ride counts, softened so quieter routes still get some traffic.
+    total = 0; cum = routes.map(function (r) { total += Math.pow(r.n, 0.6); return total; });
+    var n = W < 360 ? 45 : 80;
+    for (var i = 0; i < n; i++) spawn(Math.random());
+    drawBase();
+    link.classList.add('is-ready');
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(function () {
+        var old = routes; project();
+        riders.forEach(function (k) { k.r = routes[old.indexOf(k.r)] || routes[0]; });
+        pulses = [];
+        if (!running) drawBase();
+      }).observe(canvas);
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) { visible = e[0].isIntersecting; setRunning(); }).observe(canvas);
+    }
+    document.addEventListener('visibilitychange', setRunning);
+    setRunning();
+  }
+
+  fetch('projects/citibike-jersey-city/playground/flows.json')
+    .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+    .then(start)
+    .catch(function () { link.style.display = 'none'; });
+})();
+</script>
 <script>
 /* Live SQL: loads sql.js and the Citi Bike summary database only when the section gets close. */
 (function () {
@@ -1167,27 +1271,6 @@
       gsap.set(chars, { yPercent: 0, opacity: 1 });
       gsap.set(['.hero-lede', '.hero-meta'], { y: 0, opacity: 1 });
     }, 1800);
-
-    /* ---------- hero schema: tables outline, fields fill, joins connect ---------- */
-    var schema = document.querySelector('.hero-schema svg');
-    if (schema && schema.getClientRects().length) {
-      gsap.utils.toArray('.sc-box, .sc-join').forEach(function (p) {
-        var len = p.getTotalLength();
-        gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
-      });
-      gsap.set('.sc-title, .sc-head, .sc-row', { scaleX: 0, transformOrigin: '0% 50%' });
-      gsap.set('.sc-key, .sc-dot', { scale: 0, transformOrigin: '50% 50%' });
-      gsap.set(schema, { opacity: 1 });
-
-      gsap.timeline({ delay: 0.16 })
-        .to('.sc-box', { strokeDashoffset: 0, duration: 0.6, ease: 'power2.out', stagger: 0.12 }, 0)
-        .to('.sc-title', { scaleX: 1, duration: 0.35, ease: EASE, stagger: 0.12 }, 0.26)
-        .to('.sc-head', { scaleX: 1, duration: 0.4, ease: EASE, stagger: 0.12 }, 0.34)
-        .to('.sc-row', { scaleX: 1, duration: 0.4, ease: EASE, stagger: 0.02 }, 0.44)
-        .to('.sc-key', { scale: 1, duration: 0.3, ease: EASE, stagger: 0.07 }, 0.66)
-        .to('.sc-join', { strokeDashoffset: 0, duration: 0.55, ease: 'power2.out', stagger: 0.1 }, 0.8)
-        .to('.sc-dot', { scale: 1, duration: 0.28, ease: EASE, stagger: 0.05 }, 1.0);
-    }
 
     // Silent scroll affordance: a mark travelling down a hairline.
     gsap.fromTo('.cue-dot',

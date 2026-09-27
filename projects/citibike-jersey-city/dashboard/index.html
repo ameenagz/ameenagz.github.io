@@ -15,7 +15,7 @@
 <style>
   :root{
     --paper:#F6F8FB; --card:#FFFFFF; --ink:#102033; --steel:#55627A; --rule:#D6DDE7;
-    --accent:#14B8A6; --blue:#1D4ED8; --gain:#0D9488; --loss:#E11D48;
+    --accent:#14B8A6; --blue:#1D4ED8; --gain:#0D9488; --loss:#6366F1;
     --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
     --mono:var(--sans);
   }
@@ -51,7 +51,7 @@
   .findings li::before{content:counter(f,decimal-leading-zero);position:absolute;left:1rem;top:.9rem;font-family:var(--mono);color:var(--accent);font-weight:500}
   footer{border-top:1px solid var(--rule);padding:1.5rem 0 3rem;font-family:var(--mono);font-size:.76rem;color:var(--steel)}
   footer a{color:var(--blue)}
-  .err{background:#fee2e2;border:1px solid #fca5a5;padding:1rem;display:none}
+  .err{background:#EEF2FF;border:1px solid #C7D2FE;padding:1rem;display:none}
   @media (max-width:760px){
     .grid{grid-template-columns:1fr}
     .heat{grid-template-columns:2rem repeat(24,minmax(0,1fr));gap:1px;font-size:.6rem}
@@ -84,7 +84,7 @@
 
   <section>
     <h2>Where bikes pile up each weekday morning</h2>
-    <p class="note">Net bikes gained per weekday, 7:00 to 9:59am (arrivals minus departures). Teal stations fill up and run out of open docks. Red stations empty out and run out of bikes. Circle size shows how big the imbalance is.</p>
+    <p class="note">Net bikes gained per weekday, 7:00 to 9:59am (arrivals minus departures). Teal stations fill up and run out of open docks. Indigo stations empty out and run out of bikes. Circle size shows how big the imbalance is.</p>
     <div id="map" role="img" aria-label="Map of station imbalance during the weekday morning peak"></div>
     <div class="legend">
       <span><i class="dot" style="background:var(--gain)"></i>Gains bikes (fills up)</span>
@@ -129,7 +129,7 @@
 </div>
 
 <script>
-const C = {ink:'#102033', steel:'#55627A', rule:'#D6DDE7', blue:'#1D4ED8', accent:'#14B8A6', gain:'#0D9488', loss:'#E11D48'};
+const C = {ink:'#102033', steel:'#55627A', rule:'#D6DDE7', blue:'#1D4ED8', accent:'#14B8A6', gain:'#0D9488', loss:'#6366F1'};
 const fmt = n => n.toLocaleString('en-US');
 const pct = n => Math.round(n * 100) + '%';
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
