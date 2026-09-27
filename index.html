@@ -129,8 +129,7 @@
     background:var(--paper);pointer-events:none;
     transform-origin:right center;
   }
-  .exp .veil{background:var(--exp-bg)}
-  .contact .veil{background:var(--ink)}
+  .exp .veil,.contact .veil{background:var(--ink)}
 
   /* ---------- scroll progress ---------- */
   .progress{position:fixed;inset:0 0 auto 0;height:2px;z-index:70;pointer-events:none}
@@ -243,13 +242,8 @@
   .head h2{position:relative;font-size:var(--step-2);letter-spacing:-0.03em}
   .head .count{font-size:var(--step--1);color:var(--steel)}
 
-  /* ---------- experience: a soft slate band ---------- */
-  /* Flip the light-on-dark tokens so the pinned timeline reads dark-on-light. */
-  .exp{
-    --exp-bg:#E8EEF5;
-    --paper:#102033;--paper-rgb:16,32,51;--accent:#0F766E;
-    background:var(--exp-bg);color:var(--ink);
-  }
+  /* ---------- experience: the ink act ---------- */
+  .exp{background:var(--ink);color:var(--paper)}
   .exp-stage{
     min-height:100vh;min-height:100svh;
     display:flex;align-items:center;
